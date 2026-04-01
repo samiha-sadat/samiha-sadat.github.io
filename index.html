@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memories Album</title>
+  <meta name="description" content="A physical-album-style photo website for GitHub Pages with stable page-turn animation." />
+  <style>
+    :root {
+      --bg-1: #f3ecdf;
+      --bg-2: #e4d5bf;
+      --ink: #231f1b;
+      --muted: #6d6258;
+      --accent: #8f5b38;
+      --shadow-1: 0 30px 60px rgba(61, 39, 23, 0.18);
+      --shadow-2: 0 16px 28px rgba(0,0,0,0.1);
+      --page-w: min(46vw, 470px);
+      --page-h: min(65vw, 650px);
+      --book-w: calc(var(--page-w) * 2);
+      --book-h: var(--page-h);
+      --page-gap: 8px;
+      --spine-w: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(143,91,56,0.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.35;
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 28px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      padding: 24px 0 8px;
+    }
+
+    .topbar-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.58);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.06);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .seal {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), #b47a50);
+      color: white;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      box-shadow: 0 10px 20px rgba(143,91,56,0.3);
+    }
+
+    .brand-text small {
+      display: block;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.74rem;
+      margin-bottom: 4px;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 1.05rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font: inherit;
+      cursor: pointer;
+      background: #ffffff;
+      color: var(--ink);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.05);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 22px rgba(0,0,0,0.08);
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), #b47a50);
+      color: white;
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .hero-copy {
+      padding: 18px 2px 8px;
+      text-align: center;
+    }
+
+    .hero-copy h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 4.5vw, 4.1rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .hero-copy p {
+      margin: 14px auto 0;
+      max-width: 68ch;
+      color: #4e463f;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .album-stage {
+      padding: 20px 0 36px;
+    }
+
+    .album-frame {
+      border-radius: 36px;
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.14));
+      border: 1px solid rgba(255,255,255,0.34);
+      box-shadow: var(--shadow-1);
+    }
+
+    .album-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .meta-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.66);
+      border: 1px solid rgba(0,0,0,0.05);
+      color: #453d36;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.04);
+      font-size: 0.95rem;
+    }
+
+    .book-scene {
+      display: grid;
+      place-items: center;
+      perspective: 2800px;
+      min-height: calc(var(--book-h) + 40px);
+      position: relative;
+    }
+
+    .book-shadow {
+      position: absolute;
+      width: calc(var(--book-w) + 60px);
+      height: calc(var(--book-h) + 24px);
+      border-radius: 36px;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.04) 54%, transparent 72%);
+      transform: translateY(26px) scale(1.02);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .book {
+      position: relative;
+      width: var(--book-w);
+      height: var(--book-h);
+      max-width: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .spine {
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      left: 50%;
+      width: var(--spine-w);
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: linear-gradient(180deg, #7a4c2d, #5b3822 45%, #8c5c3a);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.12),
+        inset 0 0 16px rgba(0,0,0,0.2),
+        0 0 12px rgba(0,0,0,0.12);
+      z-index: 8;
+      pointer-events: none;
+    }
+
+    .book-page,
+    .turn-sheet {
+      position: absolute;
+      top: 0;
+      width: calc(50% - (var(--page-gap) / 2));
+      height: 100%;
+    }
+
+    .book-page.left {
+      left: 0;
+      z-index: 2;
+    }
+
+    .book-page.right {
+      right: 0;
+      z-index: 2;
+    }
+
+    .turn-sheet {
+      display: none;
+      transform-style: preserve-3d;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .turn-sheet.active {
+      display: block;
+    }
+
+    .turn-sheet.next {
+      right: 0;
+      transform-origin: left center;
+    }
+
+    .turn-sheet.prev {
+      left: 0;
+      transform-origin: right center;
+    }
+
+    .turn-sheet.next.flipping {
+      animation: flipNext 0.95s cubic-bezier(0.65, 0.02, 0.2, 0.99) forwards;
+    }
+
+    .turn-sheet.prev.flipping {
+      animation: flipPrev 0.95s cubic-bezier(0.65, 0.02, 0.2, 0.99) forwards;
+    }
+
+    @keyframes flipNext {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(-180deg); }
+    }
+
+    @keyframes flipPrev {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(180deg); }
+    }
+
+    .page-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .page-face.front {
+      transform: translateZ(0.5px);
+    }
+
+    .page-face.back {
+      transform: rotateY(180deg) translateZ(0.5px);
+    }
+
+    .page-surface {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,246,238,0.98));
+      border: 1px solid rgba(0,0,0,0.07);
+      box-shadow: var(--shadow-2);
+    }
+
+    .page-surface::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(139,91,56,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139,91,56,0.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.45;
+    }
+
+    .page-surface.side-left {
+      border-radius: 24px 0 0 24px;
+      box-shadow: 8px 12px 22px rgba(0,0,0,0.08);
+    }
+
+    .page-surface.side-right {
+      border-radius: 0 24px 24px 0;
+      box-shadow: -8px 12px 22px rgba(0,0,0,0.08);
+    }
+
+    .page-surface.blank {
+      background: linear-gradient(180deg, rgba(252,248,241,0.98), rgba(246,238,226,0.98));
+    }
+
+    .page-surface.blank::after {
+      content: "";
+      position: absolute;
+      inset: 28px;
+      border-radius: 18px;
+      border: 1px dashed rgba(143,91,56,0.16);
+      pointer-events: none;
+    }
+
+    .page-inner {
+      position: relative;
+      height: 100%;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+    }
+
+    .page-number {
+      position: absolute;
+      bottom: 16px;
+      font-size: 0.8rem;
+      color: #8a7f74;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .page-surface.side-right .page-number { right: 20px; }
+    .page-surface.side-left .page-number { left: 20px; }
+
+    .page-title {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .kicker {
+      display: inline-flex;
+      width: fit-content;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+      border-radius: 999px;
+      background: rgba(143,91,56,0.08);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .page-text {
+      color: #4a433c;
+      line-height: 1.7;
+      font-size: 0.98rem;
+    }
+
+    .cover-page {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 28%),
+        linear-gradient(135deg, #7d4e2f, #a96d44 60%, #8b5938);
+      color: white;
+    }
+
+    .cover-page::before {
+      background: linear-gradient(transparent, transparent);
+      opacity: 1;
+    }
+
+    .cover-inner {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 34px 28px 30px;
+    }
+
+    .cover-mark {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.08);
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .cover-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin: 0;
+    }
+
+    .cover-subtitle {
+      margin-top: 14px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.7;
+      max-width: 24ch;
+    }
+
+    .cover-year {
+      font-size: 0.86rem;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .divider-page {
+      background:
+        radial-gradient(circle at top left, rgba(143,91,56,0.12), transparent 28%),
+        linear-gradient(180deg, #fffaf2, #f7efe3);
+    }
+
+    .divider-layout {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .divider-time {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 3.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin: 0 0 18px;
+    }
+
+    .divider-line {
+      width: 90px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(143,91,56,0.45), transparent);
+      margin: 12px 0 18px;
+    }
+
+    .divider-message {
+      max-width: 25ch;
+      color: #544b43;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .photo-frame {
+      flex: 1;
+      min-height: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #eee6db;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+      display: grid;
+      place-items: center;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-caption {
+      margin-top: 14px;
+      color: #514a42;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .spread-grid {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .spread-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      gap: 10px;
+    }
+
+    .spread-card .photo-frame {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .spread-label {
+      font-size: 0.9rem;
+      color: #5d544c;
+    }
+
+    .quote-layout {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .quote-mark {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 4.5rem;
+      color: rgba(143,91,56,0.3);
+      line-height: 0.6;
+    }
+
+    .quote-text {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+      line-height: 1.25;
+      color: #3e352e;
+    }
+
+    .quote-author {
+      color: #7a6d61;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .message-layout {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding: 6px 2px;
+    }
+
+    .message-layout .page-title {
+      max-width: 12ch;
+    }
+
+    .back-cover {
+      background: linear-gradient(135deg, #6e4429, #885636 56%, #7d4f31);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .back-cover::before {
+      background: linear-gradient(transparent, transparent);
+      opacity: 1;
+    }
+
+    .back-cover .cover-inner {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .back-cover .cover-title {
+      max-width: 8ch;
+    }
+
+    .hint-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .hint {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(0,0,0,0.05);
+      color: #544b43;
+      font-size: 0.92rem;
+    }
+
+    .footer-note {
+      padding: 8px 0 40px;
+      text-align: center;
+      color: #5a524b;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1100px) {
+      :root {
+        --page-w: min(45vw, 410px);
+        --page-h: min(68vw, 580px);
+      }
+    }
+
+    @media (max-width: 760px) {
+      :root {
+        --page-w: min(44vw, 300px);
+        --page-h: min(70vw, 430px);
+      }
+
+      .album-frame { padding: 16px; }
+      .page-inner { padding: 18px; }
+      .spread-grid { gap: 10px; }
+      .photo-caption, .page-text, .spread-label { font-size: 0.86rem; }
+      .meta-chip { font-size: 0.88rem; }
+      .hint { font-size: 0.84rem; }
+    }
+
+    @media (max-width: 560px) {
+      :root {
+        --page-w: calc((100vw - 44px) / 2);
+        --page-h: calc(var(--page-w) * 1.45);
+        --page-gap: 6px;
+      }
+
+      .topbar-card { padding: 14px; }
+      .controls { width: 100%; justify-content: stretch; }
+      .controls .button { flex: 1 1 auto; }
+      .hero-copy p { font-size: 0.94rem; }
+      .page-inner { padding: 14px; }
+      .cover-mark { width: 56px; height: 56px; }
+      .page-surface.side-right { border-radius: 0 18px 18px 0; }
+      .page-surface.side-left { border-radius: 18px 0 0 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <div class="topbar-card">
+        <div class="brand">
+          <div class="seal">AL</div>
+          <div class="brand-text">
+            <small>GitHub Pages Album</small>
+            <strong>Physical scrapbook / yearbook style</strong>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="button" id="prevBtn" type="button">◀ Previous</button>
+          <button class="button primary" id="nextBtn" type="button">Next ▶</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-copy">
+      <h1>An album you can actually turn through.</h1>
+      <p>
+        This version feels like a physical photo book: front cover, divider pages with dates or messages,
+        full photo spreads, and page-turn animation. Replace the sample text and image paths with your own.
+      </p>
+    </section>
+
+    <section class="album-stage">
+      <div class="album-frame">
+        <div class="album-meta">
+          <div class="meta-chip" id="statusText">Front cover</div>
+          <div class="meta-chip" id="progressText">View 1 of 8</div>
+        </div>
+
+        <div class="book-scene">
+          <div class="book-shadow"></div>
+          <div class="book" id="book">
+            <div class="book-page left" id="leftPage"></div>
+            <div class="book-page right" id="rightPage"></div>
+            <div class="turn-sheet" id="turnSheet"></div>
+            <div class="spine"></div>
+          </div>
+        </div>
+
+        <div class="hint-bar">
+          <div class="hint">Use the buttons or keyboard arrows</div>
+          <div class="hint">Add divider pages for months, trips, or messages</div>
+          <div class="hint">Edit only the <strong>albumSheets</strong> array to change content</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Put your files inside an <strong>images</strong> folder and keep this file as <strong>index.html</strong> for GitHub Pages.
+    </div>
+  </div>
+
+  <script>
+    const albumSheets = [
+      {
+        front: {
+          type: "cover",
+          badge: "YB",
+          year: "2026",
+          title: "Our Beautiful\nYearbook",
+          subtitle: "A quiet collection of days, faces, and places we never want to forget."
+        },
+        back: {
+          type: "message",
+          kicker: "Prologue",
+          title: "Every album begins with a feeling.",
+          text: "Before the timelines blur together, before the seasons change again, there are these small moments. This book keeps them close."
+        }
+      },
+      {
+        front: {
+          type: "divider",
+          time: "January 2026",
+          message: "New beginnings, soft light, and the first pages of the year."
+        },
+        back: {
+          type: "photo",
+          title: "First Walk",
+          caption: "A single photograph can hold the mood of an entire day.",
+          image: "images/photo1.jpg"
+        }
+      },
+      {
+        front: {
+          type: "spread",
+          title: "Little Weekend Stories",
+          leftLabel: "Morning",
+          rightLabel: "Afternoon",
+          leftImage: "images/photo2.jpg",
+          rightImage: "images/photo3.jpg",
+          caption: "Two frames, one memory. This layout works well for before-and-after moments, friends, or matching shots."
+        },
+        back: {
+          type: "quote",
+          quote: "Some memories stay bright not because they were loud, but because they felt quietly perfect.",
+          author: "A page between moments"
+        }
+      },
+      {
+        front: {
+          type: "divider",
+          time: "Spring Break",
+          message: "A chapter for sunlight, motion, laughter, and the kind of days that disappear too quickly."
+        },
+        back: {
+          type: "photo",
+          title: "Golden Hour",
+          caption: "Use divider pages like this to introduce a new month, a trip, or a special event.",
+          image: "images/photo4.jpg"
+        }
+      },
+      {
+        front: {
+          type: "spread",
+          title: "A Two-Page Memory",
+          leftLabel: "The place",
+          rightLabel: "The people",
+          leftImage: "images/photo5.jpg",
+          rightImage: "images/photo6.jpg",
+          caption: "This paired-photo layout feels like a real scrapbook spread. You can also use portrait images here."
+        },
+        back: {
+          type: "message",
+          kicker: "A note",
+          title: "Some pages need words too.",
+          text: "Not every page has to be a photo. Message pages help the album breathe and make the story feel more intentional."
+        }
+      },
+      {
+        front: {
+          type: "divider",
+          time: "Summer 2026",
+          message: "Brighter skies, longer evenings, and the kind of memories that feel warm even later."
+        },
+        back: {
+          type: "spread",
+          title: "Sunlit Pages",
+          leftLabel: "Outdoors",
+          rightLabel: "Close-up",
+          leftImage: "images/photo7.jpg",
+          rightImage: "images/photo8.jpg",
+          caption: "Try alternating between full photo pages and divider/message pages for a more realistic album rhythm."
+        }
+      },
+      {
+        front: {
+          type: "message",
+          kicker: "Epilogue",
+          title: "And somehow, the whole year became a story.",
+          text: "At the end of the album, even the ordinary moments feel precious. That is what makes a yearbook beautiful."
+        },
+        back: {
+          type: "backcover",
+          title: "The End",
+          subtitle: "Made with love, memory, and a little page-turn animation."
+        }
+      }
+    ];
+
+    const leftPage = document.getElementById("leftPage");
+    const rightPage = document.getElementById("rightPage");
+    const turnSheet = document.getElementById("turnSheet");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const statusText = document.getElementById("statusText");
+    const progressText = document.getElementById("progressText");
+
+    let currentIndex = 0;
+    let isAnimating = false;
+
+    function escapeHtml(text = "") {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function lineBreaks(text = "") {
+      return escapeHtml(text).replaceAll("\n", "<br>");
+    }
+
+    function getState(index) {
+      const total = albumSheets.length;
+
+      if (index <= 0) {
+        return {
+          left: null,
+          right: { page: albumSheets[0].front, side: "front", sheet: 0 },
+          label: "Front cover"
+        };
+      }
+
+      if (index >= total) {
+        return {
+          left: { page: albumSheets[total - 1].back, side: "back", sheet: total - 1 },
+          right: null,
+          label: "Back cover"
+        };
+      }
+
+      const currentFront = albumSheets[index].front;
+      let label = "Album page";
+      if (currentFront.type === "divider") label = currentFront.time || "Divider page";
+      else if (currentFront.type === "spread") label = currentFront.title || "Photo spread";
+      else if (currentFront.type === "message") label = currentFront.title || "Message page";
+      else if (currentFront.type === "photo") label = currentFront.title || "Photo page";
+
+      return {
+        left: { page: albumSheets[index - 1].back, side: "back", sheet: index - 1 },
+        right: { page: albumSheets[index].front, side: "front", sheet: index },
+        label
+      };
+    }
+
+    function pageNumber(ref) {
+      if (!ref) return "";
+      return ref.side === "front" ? String(ref.sheet * 2 + 1) : String(ref.sheet * 2 + 2);
+    }
+
+    function surfaceClasses(ref, displaySide) {
+      const classes = ["page-surface", `side-${displaySide}`];
+      if (!ref) classes.push("blank");
+      if (ref?.page?.type === "cover") classes.push("cover-page");
+      if (ref?.page?.type === "divider") classes.push("divider-page");
+      if (ref?.page?.type === "backcover") classes.push("back-cover");
+      return classes.join(" ");
+    }
+
+    function innerMarkup(ref, displaySide) {
+      if (!ref) {
+        return `
+          <div class="page-inner"></div>
+        `;
+      }
+
+      const page = ref.page;
+      const number = pageNumber(ref);
+
+      if (page.type === "cover") {
+        return `
+          <div class="cover-inner">
+            <div class="cover-mark">${escapeHtml(page.badge || "YB")}</div>
+            <div>
+              <div class="cover-year">${escapeHtml(page.year || "2026")}</div>
+              <h2 class="cover-title">${lineBreaks(page.title || "Our Album")}</h2>
+              <div class="cover-subtitle">${escapeHtml(page.subtitle || "")}</div>
+            </div>
+          </div>
+          <div class="page-number">${number}</div>
+        `;
+      }
+
+      if (page.type === "backcover") {
+        return `
+          <div class="cover-inner">
+            <div class="cover-mark">✦</div>
+            <div>
+              <h2 class="cover-title">${lineBreaks(page.title || "The End")}</h2>
+              <div class="cover-subtitle">${escapeHtml(page.subtitle || "")}</div>
+            </div>
+          </div>
+          <div class="page-number">${number}</div>
+        `;
+      }
+
+      if (page.type === "divider") {
+        return `
+          <div class="page-inner">
+            <div class="divider-layout">
+              <div class="kicker">Divider Page</div>
+              <h2 class="divider-time">${escapeHtml(page.time || "A New Chapter")}</h2>
+              <div class="divider-line"></div>
+              <div class="divider-message">${escapeHtml(page.message || "")}</div>
+            </div>
+            <div class="page-number">${number}</div>
+          </div>
+        `;
+      }
+
+      if (page.type === "photo") {
+        return `
+          <div class="page-inner">
+            <div class="kicker">Photo Page</div>
+            <h2 class="page-title">${escapeHtml(page.title || "Memory")}</h2>
+            <div class="photo-frame">
+              <img src="${escapeHtml(page.image || "images/photo1.jpg")}" alt="${escapeHtml(page.title || "Photo")}" />
+            </div>
+            <div class="photo-caption">${escapeHtml(page.caption || "")}</div>
+            <div class="page-number">${number}</div>
+          </div>
+        `;
+      }
+
+      if (page.type === "spread") {
+        return `
+          <div class="page-inner">
+            <div class="kicker">Photo Spread</div>
+            <h2 class="page-title">${escapeHtml(page.title || "Two-Page Spread")}</h2>
+            <div class="spread-grid">
+              <div class="spread-card">
+                <div class="photo-frame">
+                  <img src="${escapeHtml(page.leftImage || "images/photo1.jpg")}" alt="${escapeHtml(page.leftLabel || "Left photo")}" />
+                </div>
+                <div class="spread-label">${escapeHtml(page.leftLabel || "Left")}</div>
+              </div>
+              <div class="spread-card">
+                <div class="photo-frame">
+                  <img src="${escapeHtml(page.rightImage || "images/photo2.jpg")}" alt="${escapeHtml(page.rightLabel || "Right photo")}" />
+                </div>
+                <div class="spread-label">${escapeHtml(page.rightLabel || "Right")}</div>
+              </div>
+            </div>
+            <div class="photo-caption">${escapeHtml(page.caption || "")}</div>
+            <div class="page-number">${number}</div>
+          </div>
+        `;
+      }
+
+      if (page.type === "quote") {
+        return `
+          <div class="page-inner">
+            <div class="quote-layout">
+              <div class="quote-mark">“</div>
+              <div class="quote-text">${escapeHtml(page.quote || "")}</div>
+              <div class="quote-author">${escapeHtml(page.author || "")}</div>
+            </div>
+            <div class="page-number">${number}</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="page-inner">
+          <div class="message-layout">
+            <div class="kicker">${escapeHtml(page.kicker || "Message")}</div>
+            <h2 class="page-title">${escapeHtml(page.title || "A small note")}</h2>
+            <div class="page-text">${escapeHtml(page.text || "")}</div>
+          </div>
+          <div class="page-number">${number}</div>
+        </div>
+      `;
+    }
+
+    function renderSurface(ref, displaySide) {
+      return `
+        <div class="${surfaceClasses(ref, displaySide)}">
+          ${innerMarkup(ref, displaySide)}
+        </div>
+      `;
+    }
+
+    function mountStatic(container, ref, displaySide) {
+      container.innerHTML = renderSurface(ref, displaySide);
+    }
+
+    function updateUI() {
+      const state = getState(currentIndex);
+      mountStatic(leftPage, state.left, "left");
+      mountStatic(rightPage, state.right, "right");
+      statusText.textContent = state.label;
+      progressText.textContent = `View ${currentIndex + 1} of ${albumSheets.length + 1}`;
+      prevBtn.disabled = isAnimating || currentIndex === 0;
+      nextBtn.disabled = isAnimating || currentIndex === albumSheets.length;
+    }
+
+    function clearTurnSheet() {
+      turnSheet.className = "turn-sheet";
+      turnSheet.innerHTML = "";
+    }
+
+    function nextPage() {
+      if (isAnimating || currentIndex >= albumSheets.length) return;
+
+      isAnimating = true;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+
+      const turningSheetData = albumSheets[currentIndex];
+      const nextState = getState(currentIndex + 1);
+
+      mountStatic(rightPage, nextState.right, "right");
+
+      turnSheet.className = "turn-sheet next active";
+      turnSheet.innerHTML = `
+        <div class="page-face front">
+          ${renderSurface({ page: turningSheetData.front, side: "front", sheet: currentIndex }, "right")}
+        </div>
+        <div class="page-face back">
+          ${renderSurface({ page: turningSheetData.back, side: "back", sheet: currentIndex }, "left")}
+        </div>
+      `;
+
+      requestAnimationFrame(() => {
+        turnSheet.classList.add("flipping");
+      });
+
+      turnSheet.addEventListener("animationend", () => {
+        currentIndex += 1;
+        isAnimating = false;
+        clearTurnSheet();
+        updateUI();
+      }, { once: true });
+    }
+
+    function prevPage() {
+      if (isAnimating || currentIndex <= 0) return;
+
+      isAnimating = true;
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+
+      const turningSheetIndex = currentIndex - 1;
+      const turningSheetData = albumSheets[turningSheetIndex];
+      const prevState = getState(currentIndex - 1);
+
+      mountStatic(leftPage, prevState.left, "left");
+
+      turnSheet.className = "turn-sheet prev active";
+      turnSheet.innerHTML = `
+        <div class="page-face front">
+          ${renderSurface({ page: turningSheetData.back, side: "back", sheet: turningSheetIndex }, "left")}
+        </div>
+        <div class="page-face back">
+          ${renderSurface({ page: turningSheetData.front, side: "front", sheet: turningSheetIndex }, "right")}
+        </div>
+      `;
+
+      requestAnimationFrame(() => {
+        turnSheet.classList.add("flipping");
+      });
+
+      turnSheet.addEventListener("animationend", () => {
+        currentIndex -= 1;
+        isAnimating = false;
+        clearTurnSheet();
+        updateUI();
+      }, { once: true });
+    }
+
+    nextBtn.addEventListener("click", nextPage);
+    prevBtn.addEventListener("click", prevPage);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+        event.preventDefault();
+        nextPage();
+      }
+      if (event.key === "ArrowLeft" || event.key === "PageUp") {
+        event.preventDefault();
+        prevPage();
+      }
+    });
+
+    updateUI();
+  </script>
+</body>
+</html>
