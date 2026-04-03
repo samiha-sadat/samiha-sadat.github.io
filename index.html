@@ -746,7 +746,7 @@
         },
         back: {
           type: "message",
-          kicker: "Prologue",
+          kicker: "",
           title: "Every album begins with a feeling.",
           text: "Before the timelines blur together, before the seasons change again, there are these small moments which we cherish all the time. This year has been full of them."
         }
@@ -812,7 +812,7 @@
         back: {
           type: "quote",
           quote: "When you find the right person, even forever doesn’t feel long enough. But we entered our journey of forever with hearts full of hope, love, and the promise to cherish every moment together.",
-          author: "A quite confession"
+          author: ""
         }
       },
       {
@@ -1137,10 +1137,10 @@ Zindagi ke safar mein, sirf teri baat.`,
 
       const currentFront = albumSheets[index].front;
       let label = "Album page";
-      if (currentFront.type === "divider") label = currentFront.time || "Divider page";
-      else if (currentFront.type === "spread") label = currentFront.title || "Photo spread";
-      else if (currentFront.type === "message") label = currentFront.title || "Message page";
-      else if (currentFront.type === "photo") label = currentFront.title || "Photo page";
+      if (currentFront.type === "divider") label = currentFront.time || "";
+      else if (currentFront.type === "spread") label = currentFront.title || "";
+      else if (currentFront.type === "message") label = currentFront.title || "";
+      else if (currentFront.type === "photo") label = currentFront.title || "";
 
       return {
         left: { page: albumSheets[index - 1].back, side: "back", sheet: index - 1 },
@@ -1204,7 +1204,6 @@ Zindagi ke safar mein, sirf teri baat.`,
         return `
           <div class="page-inner">
             <div class="divider-layout">
-              <div class="kicker">Divider Page</div>
               <h2 class="divider-time">${escapeHtml(page.time || "A New Chapter")}</h2>
               <div class="divider-line"></div>
               <div class="divider-message">${escapeHtml(page.message || "")}</div>
@@ -1217,7 +1216,6 @@ Zindagi ke safar mein, sirf teri baat.`,
       if (page.type === "photo") {
         return `
           <div class="page-inner">
-            <div class="kicker">Photo Page</div>
             <h2 class="page-title">${escapeHtml(page.title || "Memory")}</h2>
             <div class="photo-frame">
               <img src="${escapeHtml(page.image || "images/photo1.jpg")}" alt="${escapeHtml(page.title || "Photo")}" />
@@ -1231,7 +1229,6 @@ Zindagi ke safar mein, sirf teri baat.`,
       if (page.type === "spread") {
         return `
           <div class="page-inner">
-            <div class="kicker">Photo Spread</div>
             <h2 class="page-title">${escapeHtml(page.title || "Two-Page Spread")}</h2>
             <div class="spread-grid">
               <div class="spread-card">
@@ -1269,8 +1266,8 @@ Zindagi ke safar mein, sirf teri baat.`,
       return `
         <div class="page-inner">
           <div class="message-layout">
-            <div class="kicker">${escapeHtml(page.kicker || "Message")}</div>
-            <h2 class="page-title">${escapeHtml(page.title || "A small note")}</h2>
+            <div class="kicker">${escapeHtml(page.kicker || "")}</div>
+            <h2 class="page-title">${escapeHtml(page.title || "")}</h2>
             <div class="page-text">${escapeHtml(page.text || "")}</div>
           </div>
           <div class="page-number">${number}</div>
