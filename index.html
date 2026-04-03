@@ -685,8 +685,8 @@
         <div class="brand">
           <div class="seal">AL</div>
           <div class="brand-text">
-            <small>GitHub Pages Album</small>
-            <strong>Physical scrapbook / yearbook style</strong>
+            <!-- <small>GitHub Pages Album</small> -->
+            <strong>Memory lane</strong>
           </div>
         </div>
         <div class="controls">
@@ -696,13 +696,13 @@
       </div>
     </header>
 
-    <section class="hero-copy">
+    <!-- <section class="hero-copy">
       <h1>An album you can actually turn through.</h1>
       <p>
         This version feels like a physical photo book: front cover, divider pages with dates or messages,
         full photo spreads, and page-turn animation. Replace the sample text and image paths with your own.
       </p>
-    </section>
+    </section> -->
 
     <section class="album-stage">
       <div class="album-frame">
@@ -723,15 +723,15 @@
 
         <div class="hint-bar">
           <div class="hint">Use the buttons or keyboard arrows</div>
-          <div class="hint">Add divider pages for months, trips, or messages</div>
-          <div class="hint">Edit only the <strong>albumSheets</strong> array to change content</div>
+          <!-- <div class="hint">Add divider pages for months, trips, or messages</div>
+          <div class="hint">Edit only the <strong>albumSheets</strong> array to change content</div> -->
         </div>
       </div>
     </section>
 
-    <div class="footer-note">
+    <!-- <div class="footer-note">
       Put your files inside an <strong>images</strong> folder and keep this file as <strong>index.html</strong> for GitHub Pages.
-    </div>
+    </div> -->
   </div>
 
   <script>
@@ -739,106 +739,357 @@
       {
         front: {
           type: "cover",
-          badge: "YB",
-          year: "2026",
+          badge: "SS",
+          year: "April 2025 - March 2026",
           title: "Our Beautiful\nYearbook",
-          subtitle: "A quiet collection of days, faces, and places we never want to forget."
+          subtitle: "A quiet collection of days, moments, and places we never want to forget."
         },
         back: {
           type: "message",
           kicker: "Prologue",
           title: "Every album begins with a feeling.",
-          text: "Before the timelines blur together, before the seasons change again, there are these small moments. This book keeps them close."
+          text: "Before the timelines blur together, before the seasons change again, there are these small moments which we cherish all the time. This year has been full of them."
         }
       },
+      // {
+      //   front: {
+      //     type: "divider",
+      //     time: "January 2026",
+      //     message: "New beginnings, soft light, and the first pages of the year."
+      //   },
+      //   back: {
+      //     type: "photo",
+      //     title: "First Walk",
+      //     caption: "A single photograph can hold the mood of an entire day.",
+      //     image: "images/photo1.jpg"
+      //   }
+      // },
       {
         front: {
           type: "divider",
-          time: "January 2026",
-          message: "New beginnings, soft light, and the first pages of the year."
+          time: "First moments",
+          message: "New beginnings, gentle light, and the quiet beauty of falling in love."
         },
         back: {
           type: "photo",
-          title: "First Walk",
-          caption: "A single photograph can hold the mood of an entire day.",
-          image: "images/photo1.jpg"
+          title: "First Meet",
+          caption: "How shy we were to meet for the first time, and how that moment already feels like a story we reminisce over and over. First rickshaw ride, first metro ride, first gift exchange, first stroll down the road, everything felt so much magical that day.",
+          image: "images/first_meet.jpeg"
         }
       },
       {
         front: {
           type: "spread",
-          title: "Little Weekend Stories",
-          leftLabel: "Morning",
-          rightLabel: "Afternoon",
-          leftImage: "images/photo2.jpg",
-          rightImage: "images/photo3.jpg",
-          caption: "Two frames, one memory. This layout works well for before-and-after moments, friends, or matching shots."
+          title: "The smile that melted my heart",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/love-1.jpeg",
+          rightImage: "images/love-2.jpeg",
+          caption: "The little, unexpected photos she shared carried a quiet magic—each one melting my heart, each one pulling me deeper in love with her."
+        },
+        // back: {
+        //   type: "quote",
+        //   quote: "Some memories stay bright not because they were loud, but because they felt quietly perfect.",
+        //   author: "A page between moments"
+        // }
+        back: {
+          type: "spread",
+          title: "Our visit to BUET",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/buet-1.jpeg",
+          rightImage: "images/buet-2.jpeg",
+          caption: "The day we cherished the most—a calm and quiet morning walk through the DU campus, a mesmerizing heartfelt conversation at the BUET field, and finally, taking her to my favorite place on campus. Our stories, our laughter, our conversations, even our silences—everything felt like a dream I never wanted to wake up from."
+        }
+      },
+      {
+        front: {
+          type: "photo",
+          title: "Uttara Date",
+          caption: "The last pre-wedding date we had, a simple outing to Uttara. Even the ordinary moments feel special when we're together.",
+          image: "images/uttara.jpeg"
         },
         back: {
           type: "quote",
-          quote: "Some memories stay bright not because they were loud, but because they felt quietly perfect.",
-          author: "A page between moments"
+          quote: "When you find the right person, even forever doesn’t feel long enough. But we entered our journey of forever with hearts full of hope, love, and the promise to cherish every moment together.",
+          author: "A quite confession"
         }
       },
       {
         front: {
           type: "divider",
-          time: "Spring Break",
-          message: "A chapter for sunlight, motion, laughter, and the kind of days that disappear too quickly."
+          time: "The Beginning of Forever",
+          message: "A moment where love turned into a promise, and two hearts chose forever."
+        },
+        // back: {
+        //   type: "message",
+        //   kicker: "A note",
+        //   title: "Some pages need words too.",
+        //   text: "Not every page has to be a photo. Message pages help the album breathe and make the story feel more intentional."
+        // },
+        back: {
+          type: "spread",
+          title: "Her mehendi day",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/mehedi-1.jpeg",
+          rightImage: "images/mehedi-2.jpeg",
+          caption: "Her smile, the shyness in that sudden video call, my name traced in her mehendi—everything felt so alive, so full of meaning."
+        }
+      },
+      {
+        // front: {
+        //   type: "divider",
+        //   time: "Summer 2026",
+        //   message: "Brighter skies, longer evenings, and the kind of memories that feel warm even later."
+        // },
+        front: {
+          type: "spread",
+          title: "Her Holud Shondha",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/holud-1.jpeg",
+          rightImage: "images/holud-2.jpeg",
+          caption: "How many times I had to beg for these images… 😅 but seeing her smile made every plea worth it."
         },
         back: {
+          type: "spread",
+          title: "The we said Kabool!",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/marriage-1.jpeg",
+          rightImage: "images/marriage-2.jpeg",
+          caption: "And finally we tied the knot, promising to be each other's forever. The day felt like a beautiful dream, one that I wish I could relive every day for the rest of our lives."
+        }
+        // back: {
+        //   type: "spread",
+        //   title: "Sunlit Pages",
+        //   leftLabel: "Outdoors",
+        //   rightLabel: "Close-up",
+        //   leftImage: "images/photo7.jpg",
+        //   rightImage: "images/photo8.jpg",
+        //   caption: "Try alternating between full photo pages and divider/message pages for a more realistic album rhythm."
+        // }
+      },
+      {
+        // front: {
+        //   type: "message",
+        //   kicker: "Epilogue",
+        //   title: "And somehow, the whole year became a story.",
+        //   text: "At the end of the album, even the ordinary moments feel precious. That is what makes a yearbook beautiful."
+        // },
+        front: {
+          type: "spread",
+          title: "When Rain Whispers Romance",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/photoshoot-1.jpeg",
+          rightImage: "images/photoshoot-2.jpeg",
+          caption: "That rainy day after the wedding, lost in each other’s laughter, feeling like nothing else mattered."
+        },
+        back:{
+          type: "quote",
+          quote: "And the journey begins",
+          author: ""
+        }
+        // back: {
+        //   type: "backcover",
+        //   title: "The End",
+        //   subtitle: "Made with love, memory, and a little page-turn animation."
+        // }
+      },
+      {
+        front: {
+          type: "divider",
+          time: "Just Married, Just Us",
+          message: "Just the two of us, wrapped in laughter and love, discovering the joy of our first hours as a married couple."
+        },
+        back:{
           type: "photo",
-          title: "Golden Hour",
-          caption: "Use divider pages like this to introduce a new month, a trip, or a special event.",
-          image: "images/photo4.jpg"
+          title: "First Eid",
+          // caption: "With the shopping and preparations finally behind us, we dressed up and let ourselves soak in the joy of the moment.",
+          image: "images/first-eid.jpeg"
+        }
+      },
+      {
+        front:{
+          type: "spread",
+          title: "Movie date",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/movie-1.jpeg",
+          rightImage: "images/movie-2.jpeg",
+          // caption: "The little, unexpected photos she shared carried a quiet magic—each one melting my heart, each one pulling me deeper in love with her."
+        },
+        back: {
+          type: "spread",
+          title: "Some ghuraghuri",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/ghuraghuri.jpeg",
+          rightImage: "images/ghuraghuri-2.jpeg",
+          // caption: "The little, unexpected photos she shared carried a quiet magic—each one melting my heart, each one pulling me deeper in love with her."
+        }
+        
+      },
+      {
+        front: {
+          type: "photo",
+          title: "Some ghuraghuri",
+          // caption: "With the shopping and preparations finally behind us, we dressed up and let ourselves soak in the joy of the moment.",
+          image: "images/ghuraghuri-3.jpeg"
+        },
+        back:{
+          type: "photo",
+          title: "Two Monthaversary",
+          // caption: "With the shopping and preparations finally behind us, we dressed up and let ourselves soak in the joy of the moment.",
+          image: "images/2month-1.jpeg"
         }
       },
       {
         front: {
-          type: "spread",
-          title: "A Two-Page Memory",
-          leftLabel: "The place",
-          rightLabel: "The people",
-          leftImage: "images/photo5.jpg",
-          rightImage: "images/photo6.jpg",
-          caption: "This paired-photo layout feels like a real scrapbook spread. You can also use portrait images here."
+          type: "photo",
+          title: "Two Monthaversary",
+          // caption: "With the shopping and preparations finally behind us, we dressed up and let ourselves soak in the joy of the moment.",
+          image: "images/2month-2.jpeg"
         },
-        back: {
-          type: "message",
-          kicker: "A note",
-          title: "Some pages need words too.",
-          text: "Not every page has to be a photo. Message pages help the album breathe and make the story feel more intentional."
+        back:{
+          type: "quote",
+          quote: "Honeymoon Bliss ❤️",
+          author: ""
+        }
+      },
+      {
+        front:{
+          type: "divider",
+          time: "Where Love Took Flight ❤️",
+          message: "Every smile, every glance, every adventure—our honeymoon was pure magic, a dream we lived together."
+        },
+        back:{
+          type: "spread",
+          title: "Honeymoon ❤️",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/honeymoon-1.jpeg",
+          rightImage: "images/honeymoon-2.jpeg",
+          caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
+        }
+      },
+      {
+        front: {
+          type: "photo",
+          title: "Honeymoon ❤️",
+          caption: "The drive by the marine drive, the sunset we watched together, the quiet moments that felt so full of love and promise.",
+          image: "images/honeymoon-3.jpeg"
+        },
+        back:{
+          type: "quote",
+          quote: "The Start of Our Miles Apart… 😢",
+          author: ""
         }
       },
       {
         front: {
           type: "divider",
-          time: "Summer 2026",
-          message: "Brighter skies, longer evenings, and the kind of memories that feel warm even later."
+          time: "Miles Between, Heartaches Between…",
+          message: "Though the miles stretched long, our hearts never parted—every thought of you made the distance fade away."
         },
         back: {
           type: "spread",
-          title: "Sunlit Pages",
-          leftLabel: "Outdoors",
-          rightLabel: "Close-up",
-          leftImage: "images/photo7.jpg",
-          rightImage: "images/photo8.jpg",
-          caption: "Try alternating between full photo pages and divider/message pages for a more realistic album rhythm."
+          title: "Her trips without me… 🥹",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/samihatrip-1.jpeg",
+          rightImage: "images/samihatrip2.jpeg",
+          // caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
         }
       },
       {
         front: {
-          type: "message",
-          kicker: "Epilogue",
-          title: "And somehow, the whole year became a story.",
-          text: "At the end of the album, even the ordinary moments feel precious. That is what makes a yearbook beautiful."
+          type: "spread",
+          title: "My trips without her… 🥹",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/mytrip1.jpeg",
+          rightImage: "images/mytrip2.jpeg",
+          // caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
         },
-        back: {
-          type: "backcover",
-          title: "The End",
-          subtitle: "Made with love, memory, and a little page-turn animation."
+        back:{
+          type: "divider",
+          time: "We meet again… 🥹",
+          message: "The winter chill, walks in the wind, shopping escapades, shared laughter, and, most importantly, the cuddles that made it all perfect."
         }
-      }
+      },
+      {
+        front: {
+          type: "spread",
+          title: "Winter dates",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/ghuraghuri-4.jpeg",
+          rightImage: "images/ghuraghuri-5.jpeg",
+          // caption: "The little, unexpected photos she shared carried a quiet magic—each one melting my heart, each one pulling me deeper in love with her."
+        },
+        back:{
+          type: "quote",
+          quote: "And last but not least, a little photo dump—because I can’t stop admiring my beautiful wife. My heart skips a beat every time I see her smile, and I fall in love with her more and more every single day. 🥹❤️",
+          author: ""
+        }
+      },
+      {
+        front: {
+          type: "spread",
+          title: "My 'Ya Ruhi' ❤️",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/photodump-1.jpeg",
+          rightImage: "images/photodump-2.jpeg",
+          // caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
+        },
+        back:{
+          type: "spread",
+          title: "My 'Ya Ruhi' ❤️",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/photodump-3.jpeg",
+          rightImage: "images/photodump-4.jpeg",
+          // caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
+        }
+      },
+      {
+        front: {
+          type: "spread",
+          title: "My 'Ya Ruhi' ❤️",
+          leftLabel: "",
+          rightLabel: "",
+          leftImage: "images/photodump-5.jpeg",
+          rightImage: "images/photodump-6.jpeg",
+          // caption: "The cozy hotel room, long walks by the sea, exploring a new city hand in hand, caring for and loving each other in ways we never had before."
+        },
+        back:{
+          type: "photo",
+          title: "My 'Ya Ruhi' ❤️",
+          // caption: "",
+          image: "images/photodump-7.jpeg"
+        }
+      },
+      {
+        front: {
+          type: "quote",
+          quote: `Choti choti khushiyan, hansne ke pal,
+Saath guzar gaye din, yaadon ke hal.
+Har nayi subah, teri yaadon ke saath,
+Zindagi ke safar mein, sirf teri baat.`,
+          author: ""
+        },
+        back:{
+          type: "cover",
+          badge: "SS",
+          year: "",
+          title: "Our story continues…",
+          subtitle: ""
+        }
+      },
     ];
 
     const leftPage = document.getElementById("leftPage");
@@ -987,13 +1238,13 @@
                 <div class="photo-frame">
                   <img src="${escapeHtml(page.leftImage || "images/photo1.jpg")}" alt="${escapeHtml(page.leftLabel || "Left photo")}" />
                 </div>
-                <div class="spread-label">${escapeHtml(page.leftLabel || "Left")}</div>
+                <div class="spread-label">${escapeHtml(page.leftLabel || "")}</div>
               </div>
               <div class="spread-card">
                 <div class="photo-frame">
                   <img src="${escapeHtml(page.rightImage || "images/photo2.jpg")}" alt="${escapeHtml(page.rightLabel || "Right photo")}" />
                 </div>
-                <div class="spread-label">${escapeHtml(page.rightLabel || "Right")}</div>
+                <div class="spread-label">${escapeHtml(page.rightLabel || "")}</div>
               </div>
             </div>
             <div class="photo-caption">${escapeHtml(page.caption || "")}</div>
@@ -1007,7 +1258,7 @@
           <div class="page-inner">
             <div class="quote-layout">
               <div class="quote-mark">“</div>
-              <div class="quote-text">${escapeHtml(page.quote || "")}</div>
+              <div class="quote-text">${lineBreaks(page.quote || "")}</div>
               <div class="quote-author">${escapeHtml(page.author || "")}</div>
             </div>
             <div class="page-number">${number}</div>
